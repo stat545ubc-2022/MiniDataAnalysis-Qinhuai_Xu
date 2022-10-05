@@ -1,6 +1,6 @@
 ---
 title: "Mini Data-Analysis Deliverable 1"
-output: html_document
+output: github_document
 ---
 
 # Welcome to your (maybe) first-ever data analysis project!
@@ -80,10 +80,10 @@ And that is exactly the first thing that you will do!
 
 <!-------------------------- Start your work below ---------------------------->
 
-1: CHOICE_1\_HERE\
-2: CHOICE_2\_HERE\
-3: CHOICE_3\_HERE\
-4: CHOICE_4\_HERE
+1: CHOICE_1\_building_permits\
+2: CHOICE_2\_flow_sample\
+3: CHOICE_3\_steam_games\
+4: CHOICE_4\_vancouver_trees
 
 <!----------------------------------------------------------------------------->
 
@@ -95,7 +95,10 @@ And that is exactly the first thing that you will do!
 
 ```{r}
 ### EXPLORE HERE ###
-steam_games
+glimpse(building_permits)
+glimpse(flow_sample)
+glimpse(steam_games)
+glimpse(vancouver_trees)
 ```
 
 <!----------------------------------------------------------------------------->
