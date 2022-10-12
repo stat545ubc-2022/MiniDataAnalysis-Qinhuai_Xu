@@ -218,7 +218,7 @@ And 3 different data types, including:
 <!-------------------------- Start your work below ---------------------------->
 ```{R}
 flow_sample %>%
-  select(station_id, year, month, day, extreme_type, flow, sym) %>%
+  select(everything()) %>%
   arrange(year)
 ```
 
@@ -231,7 +231,7 @@ sum(is.na(steam_games)) / (sum(is.na(steam_games)) + sum(!is.na(steam_games)))
 
 sum(is.na(vancouver_trees)) / (sum(is.na(vancouver_trees)) + sum(!is.na(vancouver_trees)))
 ```
-From the above code, I try to explore how many NA values are in each dataset and we can easily see that the percentage of NA values in `steam game` is much higher than the others, which may affect my further research and exploration.
+From the above code, I try to explore the percentage of NA values in each dataset and we can easily see that the NA values in `steam game` is much higher than the others, which may affect my further exploration.
 
 **Therefore, I would like to choose `building_permits` and `vancouver_trees` datasets.**
 
@@ -384,8 +384,7 @@ Make sure it's clear what research question you are doing each operation for!
 
 **Summarizing:**
 
-I compute the *range*, *mean*, *median*, and *variance* of `diameter` across the groups of `root_barrier` from the dataset. Then plot a graph out of the mean value.
-
+I compute the *range*, *mean*, *median*, and *variance* of `diameter` across the groups of `root_barrier` from the dataset and use the *mean* value to plot.
 ```{R}
 statistics_vancouver_trees <- vancouver_trees %>%
   select(diameter, root_barrier) %>%

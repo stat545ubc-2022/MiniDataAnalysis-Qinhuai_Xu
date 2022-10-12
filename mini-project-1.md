@@ -369,23 +369,23 @@ in your explanation.
 
 ``` r
 flow_sample %>%
-  select(station_id, year, month, day, extreme_type, flow, sym) %>%
+  select(everything()) %>%
   arrange(year)
 ```
 
     ## # A tibble: 218 × 7
-    ##    station_id  year month   day extreme_type   flow sym  
-    ##    <chr>      <dbl> <dbl> <dbl> <chr>         <dbl> <chr>
-    ##  1 05BB001     1909     7     7 maximum      314    <NA> 
-    ##  2 05BB001     1909    NA    NA minimum       NA    <NA> 
-    ##  3 05BB001     1910     6    12 maximum      230    <NA> 
-    ##  4 05BB001     1910    NA    NA minimum       NA    <NA> 
-    ##  5 05BB001     1911     6    14 maximum      264    <NA> 
-    ##  6 05BB001     1911     2    27 minimum        5.75 <NA> 
-    ##  7 05BB001     1912     8    25 maximum      174    <NA> 
-    ##  8 05BB001     1912     3    14 minimum        5.8  <NA> 
-    ##  9 05BB001     1913     6    11 maximum      232    <NA> 
-    ## 10 05BB001     1913     3    18 minimum        6.12 B    
+    ##    station_id  year extreme_type month   day   flow sym  
+    ##    <chr>      <dbl> <chr>        <dbl> <dbl>  <dbl> <chr>
+    ##  1 05BB001     1909 maximum          7     7 314    <NA> 
+    ##  2 05BB001     1909 minimum         NA    NA  NA    <NA> 
+    ##  3 05BB001     1910 maximum          6    12 230    <NA> 
+    ##  4 05BB001     1910 minimum         NA    NA  NA    <NA> 
+    ##  5 05BB001     1911 maximum          6    14 264    <NA> 
+    ##  6 05BB001     1911 minimum          2    27   5.75 <NA> 
+    ##  7 05BB001     1912 maximum          8    25 174    <NA> 
+    ##  8 05BB001     1912 minimum          3    14   5.8  <NA> 
+    ##  9 05BB001     1913 maximum          6    11 232    <NA> 
+    ## 10 05BB001     1913 minimum          3    18   6.12 B    
     ## # … with 208 more rows
 
 From the above code, we can know that the `flow_sample` dataset records
@@ -411,10 +411,9 @@ sum(is.na(vancouver_trees)) / (sum(is.na(vancouver_trees)) + sum(!is.na(vancouve
 
     ## [1] 0.0651844
 
-From the above code, I try to explore how many NA values are in each
-dataset and we can easily see that the percentage of NA values in
-`steam game` is much higher than the others, which may affect my further
-research and exploration.
+From the above code, I try to explore the percentage of NA values in
+each dataset and we can easily see that the NA values in `steam game` is
+much higher than the others, which may affect my further exploration.
 
 **Therefore, I would like to choose `building_permits` and
 `vancouver_trees` datasets.**
@@ -731,8 +730,8 @@ for!
 **Summarizing:**
 
 I compute the *range*, *mean*, *median*, and *variance* of `diameter`
-across the groups of `root_barrier` from the dataset. Then plot a graph
-out of the mean value.
+across the groups of `root_barrier` from the dataset and use the *mean*
+value to plot.
 
 ``` r
 statistics_vancouver_trees <- vancouver_trees %>%
