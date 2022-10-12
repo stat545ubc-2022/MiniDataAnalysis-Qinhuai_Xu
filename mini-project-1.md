@@ -958,7 +958,7 @@ question 2.
 From the column graph, I can clearly see that the neighourhood
 *KITSILANO* has the most different genus of trees, which is 73.
 
-**Research question 3**
+**Research question 3:**
 
 > What is the relationship between tree diameter and date_plant? Is it
 > possible to predict tree diameter based on the variables like
@@ -972,7 +972,7 @@ earlier planted date tends to have larger diameter. However, predicting
 tree diameter should consider more variables, and data mining algorithms
 should be applied.
 
-**Research question 4**
+**Research question 4:**
 
 > Based on the locations of all trees, can we visualize the trees’ map
 > and apply clustering algorithms to find out the clusters of each
