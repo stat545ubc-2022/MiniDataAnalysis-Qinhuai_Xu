@@ -985,10 +985,10 @@ question 4.
 Based on the longitude and latitude, I visualize the trees’ map for the
 5 most popular genus trees. Because there are lots of overlapping
 between these points, alpha transparency is applied to make them clear.
-I also noticed that some genus of tree distributions are quite dispersed
-that it is difficult (or meaningless) to find the clusters of them.
 
-Therefore, I would like to apply clustering algorithms only on
+To be mentioned that some genus of tree distributions are quite
+dispersed that it is difficult (or meaningless) to find the clusters of
+them. Therefore, I would like to apply clustering algorithms only on
 particular tree genus with obvious clusters.
 
 <!----------------------------------------------------------------------------->
