@@ -538,7 +538,7 @@ than 100 and there are only 10 trees with diameter over 100.
 **Exercise 2**
 
 Next, I created a new variable `location` to combine longitude and
-latitude columns(corresponding to Q2), which makes the tree location
+latitude columns (corresponding to Q2), which makes the tree location
 clear.
 
 ``` r
@@ -611,7 +611,7 @@ NA values, which are `plant_area`(1486), `longitude`(22771),
 
 **Exercise 4**
 
-I want to make a new tibble with a subset of my data(corresponding to
+I want to make a new tibble with a subset of my data (corresponding to
 Q7), with `tree_id`, `diameter`, `height_range_id`, `genus_name`,
 `species_name`, `cultivar_name`, `common_name` and filter all
 `root_barrier='Y'` observations to further explore the relationship
@@ -732,7 +732,7 @@ for!
 
 I compute the *range*, *mean*, *median*, and *variance* of `diameter`
 across the groups of `root_barrier` from the dataset. Then plot a graph
-out of the mean value
+out of the mean value.
 
 ``` r
 statistics_vancouver_trees <- vancouver_trees %>%
@@ -920,7 +920,7 @@ which genus these points are belonging to.
 vancouver_trees %>%
   filter(genus_name == c("ACER", "PRUNUS", "FRAXINUS", "TILIA", "QUERCUS")) %>%
   ggplot(aes(x = longitude, y = latitude, color = genus_name)) +
-  geom_point(alpha = 0.5, size = 0.9)
+  geom_point(alpha = 0.3, size = 0.9)
 ```
 
 ![](mini-project-1_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
@@ -984,9 +984,9 @@ question 4.
 
 Based on the longitude and latitude, I visualize the trees’ map for the
 5 most popular genus trees. Because there are lots of overlapping
-between these points, I applied alpha transparency to make them clear. I
-noticed that some genus of tree distributions are quite dispersed that
-it is difficult (or meaningless) to find the clusters of them.
+between these points, alpha transparency is applied to make them clear.
+I also noticed that some genus of tree distributions are quite dispersed
+that it is difficult (or meaningless) to find the clusters of them.
 
 Therefore, I would like to apply clustering algorithms only on
 particular tree genus with obvious clusters.
