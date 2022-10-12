@@ -80,10 +80,10 @@ And that is exactly the first thing that you will do!
 
 <!-------------------------- Start your work below ---------------------------->
 
-1: CHOICE_1\_building_permits\
-2: CHOICE_2\_flow_sample\
-3: CHOICE_3\_steam_games\
-4: CHOICE_4\_vancouver_trees
+1: building_permits\
+2: flow_sample\
+3: steam_games\
+4: vancouver_trees
 
 <!----------------------------------------------------------------------------->
 
@@ -93,25 +93,155 @@ And that is exactly the first thing that you will do!
 
 <!-------------------------- Start your work below ---------------------------->
 
+**1. building_permits**
+
 ```{r}
-### EXPLORE HERE ###
 glimpse(building_permits)
+```
+There are 20680 rows and 14 columns in the dataset `building_permits`, including: 
+
+* permit_number
+* issue_date
+* project_value
+* type_of_work 
+* address
+* project_description
+* building_contractor
+* building_contractor_address
+* applicant
+* applicant_address
+* property_use
+* specific_use_category
+* year
+* bi_id
+
+And 3 different data types, including:
+
+* chr
+* date
+* dbl
+
+**2. flow_sample**
+
+```{R}
 glimpse(flow_sample)
+```
+There are 218 rows and 7 columns in the dataset `flow_sample`, including: 
+
+* station_id
+* year
+* extreme_type
+* month
+* day
+* flow
+* sym
+
+And 2 different data types, including:
+
+* chr
+* dbl
+
+**3. steam_games**
+
+```{R}
 glimpse(steam_games)
+```
+There are 40833 rows and 21 columns in the dataset `steam_games`, including: 
+
+* id
+* url
+* types
+* name
+* desc_snippet
+* recent_reviews
+* all_reviews
+* release_date
+* developer
+* publisher
+* popular_tags
+* game_details
+* languages
+* achievements
+* genre
+* game_description
+* mature_content
+* minimum_requirements
+* recommended_requirements
+* original_price
+* discount_price
+
+And 2 different data types, including:
+
+* chr
+* dbl
+
+**4. vancouver_trees**
+
+```{R}
 glimpse(vancouver_trees)
 ```
+There are 146611 rows and 20 columns in the dataset `vancouver_trees`, including: 
+
+* tree_id
+* civic_number
+* std_street
+* genus_name
+* species_name
+* cultivar_name
+* common_name
+* assigned
+* root_barrier
+* plant_area
+* on_street_block
+* on_street
+* neighbourhood_name
+* street_side_name
+* height_range_id
+* diameter
+* curb
+* date_planted
+* longitude
+* latitude
+
+And 3 different data types, including:
+
+* chr
+* date
+* dbl
+
+
 
 <!----------------------------------------------------------------------------->
 
 1.3 Now that you've explored the 4 datasets that you were initially most interested in, let's narrow it down to 2. What lead you to choose these 2? Briefly explain your choices below, and feel free to include any code in your explanation.
 
 <!-------------------------- Start your work below ---------------------------->
+```{R}
+flow_sample %>%
+  select(station_id, year, month, day, extreme_type, flow, sym) %>%
+  arrange(year)
+```
+
+From the above code, we can know that the `flow_sample` dataset records the minimum and maximum flow in each year from 1909 to 2018 (except 2017). This dataset maybe a little bit simple to research because there are few correlations between these columns.
+
+```{R}
+sum(is.na(building_permits)) / (sum(is.na(building_permits)) + sum(!is.na(building_permits)))
+
+sum(is.na(steam_games)) / (sum(is.na(steam_games)) + sum(!is.na(steam_games)))
+
+sum(is.na(vancouver_trees)) / (sum(is.na(vancouver_trees)) + sum(!is.na(vancouver_trees)))
+```
+From the above code, I try to explore how many NA values are in each dataset and we can easily see that the percentage of NA values in `steam game` is much higher than the others, which may affect my further research and exploration.
+
+**Therefore, I would like to choose `building_permits` and `vancouver_trees` datasets.**
+
 
 <!----------------------------------------------------------------------------->
 
 1.4 Time for the final decision! Going back to the beginning, it's important to have an *end goal* in mind. For example, if I had chosen the `titanic` dataset for my project, I might've wanted to explore the relationship between survival and other variables. Try to think of 1 research question that you would want to answer with each dataset. Note them down below, and make your final choice based on what seems more interesting to you!
 
 <!-------------------------- Start your work below ---------------------------->
+**Finally, I would like to choose `vancouver_trees` dataset for my project. I want to explore the relationship between tree diameter, height and other variables(such as genus, species, cultivar, root barrier...)**
 
 <!----------------------------------------------------------------------------->
 
@@ -139,6 +269,60 @@ If we rewind and go back to the learning objectives, you'll see that by the end 
 2.2 For each of the 4 exercises that you complete, provide a *brief explanation* of why you chose that exercise in relation to your data (in other words, why does it make sense to do that?), and sufficient comments for a reader to understand your reasoning and code.
 
 <!-------------------------- Start your work below ---------------------------->
+**Exercise 1**
+
+I would like to know the distribution of tree diameter in the dataset (corresponding to Q1).
+
+```{R}
+answer1 <- ggplot(vancouver_trees, aes(x = diameter, y = ..density..)) +
+   geom_density()
+
+print(answer1)
+
+vancouver_trees %>%
+  select(tree_id, diameter) %>%
+  filter(diameter > 100)
+```
+From the above graph, we can know that most trees' diameter are less than 100 and there are only 10 trees with diameter over 100.
+
+
+**Exercise 2**
+
+Next, I created a new variable `location` to combine longitude and latitude columns(corresponding to Q2), which makes the tree location clear.
+```{R}
+vancouver_trees %>%
+  unite(col = location, c(longitude, latitude), sep = ", ") %>%
+  select(tree_id, location)
+```
+
+**Exercise 3**
+
+I try to find the missing values in each variable and plot them (corresponding to Q3).
+
+```{R}
+na_count <- vancouver_trees %>%
+  summarise(across(everything(), function(x) sum(length(which(is.na(x)))))) %>%
+  pivot_longer(cols = everything(), names_to = 'columns') 
+
+print(na_count)
+
+ggplot(na_count, aes(value, columns)) + geom_col()
+```
+
+From the table and plot, we can see that there are 5 columns containing NA values, which are `plant_area`(1486), `longitude`(22771), `latitude`(22771), `date_planted`(76548), `cultivar_name`(67559).
+
+
+**Exercise 4**
+
+I want to make a new tibble with a subset of my data(corresponding to Q7), with `tree_id`, `diameter`, `height_range_id`, `genus_name`, `species_name`, `cultivar_name`, `common_name` and filter all `root_barrier='Y'` observations to further explore the relationship between these variables.
+
+```{R}
+subset_vancouver_trees <- vancouver_trees %>%
+  select(tree_id, diameter, height_range_id, genus_name, species_name, cultivar_name, common_name,root_barrier) %>%
+  filter(root_barrier == 'N')
+
+print(subset_vancouver_trees)
+```
 
 <!----------------------------------------------------------------------------->
 
@@ -147,6 +331,24 @@ If we rewind and go back to the learning objectives, you'll see that by the end 
 So far, you have chosen a dataset and gotten familiar with it through exploring the data. Now it's time to figure out 4 research questions that you would like to answer with your data! Write the 4 questions and any additional comments at the end of this deliverable. These questions are not necessarily set in stone - TAs will review them and give you feedback; therefore, you may choose to pursue them as they are for the rest of the project, or make modifications!
 
 <!--- *****START HERE***** --->
+
+**Question 1**
+
+> Is root barrier affecting the diameter of trees?
+
+**Question 2**
+
+> What is the most popular tree genus for each neighourhood?
+
+**Question 3**
+
+> What is the relationship between tree diameter and date_plant? Is it possible to predict tree diameter based on the variables like date_plant, genus, species?
+
+**Question 4**
+
+> Based on the given tree's location, can we visualize the trees' map and apply clustering algorithms to find out the clusters of each genus?
+
+
 
 # Task 4: Process and summarize your data (13 points)
 
@@ -175,6 +377,137 @@ Ensure that the output of each operation is printed!
 Make sure it's clear what research question you are doing each operation for!
 
 <!------------------------- Start your work below ----------------------------->
+
+**Question 1**
+
+> Is root barrier affecting the diameter of trees?
+
+**Summarizing:**
+
+I compute the *range*, *mean*, *median*, and *variance* of `diameter` across the groups of `root_barrier` from the dataset. Then plot a graph out of the mean value
+
+```{R}
+statistics_vancouver_trees <- vancouver_trees %>%
+  select(diameter, root_barrier) %>%
+  group_by(root_barrier) %>%
+  summarise(range =  max(diameter) - min(diameter), mean = mean(diameter),  median = median(diameter), variance = var(diameter))
+
+print(statistics_vancouver_trees)
+```
+
+**Graphing:**
+
+Based on summarizing result, this graph with two geom layers shows the *mean* of `diameter` for the trees installed Root barrier or not.
+
+```{R}
+ggplot(statistics_vancouver_trees, aes(root_barrier, mean)) + 
+    geom_col() +
+    geom_text(aes(label = mean), nudge_y = 0.5)
+```
+
+
+**Question 2**
+
+> Which neighourhood has the most different genus of trees?
+
+**Summarizing:**
+
+I compute the number of observations for `genus` and `neighbourhood` variables. 
+
+```{R}
+genus_neighbourhood_vancouver_trees <- vancouver_trees %>%
+  select(neighbourhood_name, genus_name) %>%
+  group_by(neighbourhood_name, genus_name) %>%
+  count()
+
+print(genus_neighbourhood_vancouver_trees)
+```
+
+**Graphing:**
+
+Based on summarizing result, I further compute the number of different tree genus in each neighbourhood and plot them with two geom layers.
+
+```{R}
+genus_neighbourhood_vancouver_trees %>%
+  select(neighbourhood_name, genus_name) %>%
+  distinct() %>%
+  group_by(neighbourhood_name) %>%
+  count() %>%
+  ggplot(aes(neighbourhood_name, n)) + 
+    geom_col() +
+    geom_text(aes(label = n), nudge_y = 2) +
+    coord_flip()
+```
+
+
+**Question 3**
+
+> What is the relationship between tree diameter and date_plant? Is it possible to predict tree diameter based on the variables like date_plant, genus, species?
+
+**Summarizing:**
+
+I create a categorical variable `classfied_diameter` with 4 groups from `diameter` variable. 
+
+1. 0 < diameter < 5: small
+2. 5 <= diameter < 10: middle
+3. 10 <= diameter < 20: large
+4. diameter >= 20: huge
+
+After classifying, there are 26187, 43379, 30530, and 46515 observations respectively.
+
+```{R}
+classified_vancouver_trees <- vancouver_trees %>%
+  select(tree_id, diameter) %>%
+  mutate(classfied_diameter = NA)
+
+classified_vancouver_trees$classfied_diameter <- as.factor(ifelse(classified_vancouver_trees$diameter<5, 'small', ifelse(classified_vancouver_trees$diameter<10, 'middle',ifelse(classified_vancouver_trees$diameter<20, 'large', ifelse(classified_vancouver_trees$diameter>=20, 'huge', NA)))))
+
+classified_vancouver_trees %>%
+  group_by(classfied_diameter) %>%
+  count()
+```
+
+**Graphing:**
+
+I create a graph to explore the relationship between `diameter` and `date_planted`, For pretty and easier reading, I make `y = diameter` logarithmic.
+
+```{R}
+vancouver_trees %>%
+  ggplot(aes(date_planted, diameter)) +
+  geom_point(alpha = 0.03, size = 1) +
+  scale_y_log10("diameter") +
+  theme_bw() +
+  xlab("date_planted")
+```
+
+
+**Question 4**
+
+> Based on the locations of all trees, can we visualize the trees' map and apply clustering algorithms to find out the clusters of each genus?
+
+**Summarizing:**
+
+I compute the number of observations for `genus` and sort them. Then I try to find out the top 5 number of tree genus and plot them.
+
+```{R}
+vancouver_trees %>%
+  select(genus_name) %>%
+  group_by(genus_name) %>%
+  count() %>%
+  arrange(desc(n))
+```
+
+**Graphing:**
+
+Based on the summarizing result, I decide to make a graph to plot the distribution of *ACER*, *PRUNUS*, *FRAXINUS*, *TILIA*, *QUERCUS* trees based on their location (longitude and latitude). Customized alpha transparency is used because there are lots of overlapping points in the graph. The alpha transparency makes it easy for readers to identify which genus these points are belonging to.
+
+```{R}
+vancouver_trees %>%
+  filter(genus_name == c("ACER", "PRUNUS", "FRAXINUS", "TILIA", "QUERCUS")) %>%
+  ggplot(aes(x = longitude, y = latitude, color = genus_name)) +
+  geom_point(alpha = 0.5, size = 0.8)
+
+```
 
 <!----------------------------------------------------------------------------->
 
