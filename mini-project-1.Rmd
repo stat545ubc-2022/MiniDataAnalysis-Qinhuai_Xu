@@ -93,9 +93,9 @@ And that is exactly the first thing that you will do!
 
 <!-------------------------- Start your work below ---------------------------->
 
-**1. building_permits**
+#### 1. building_permits
 
-```{r}
+```{R}
 glimpse(building_permits)
 ```
 There are 20680 rows and 14 columns in the dataset `building_permits`, including: 
@@ -121,7 +121,7 @@ And 3 different data types, including:
 * date
 * dbl
 
-**2. flow_sample**
+#### 2. flow_sample
 
 ```{R}
 glimpse(flow_sample)
@@ -141,7 +141,7 @@ And 2 different data types, including:
 * chr
 * dbl
 
-**3. steam_games**
+#### 3. steam_games
 
 ```{R}
 glimpse(steam_games)
@@ -175,7 +175,7 @@ And 2 different data types, including:
 * chr
 * dbl
 
-**4. vancouver_trees**
+#### 4. vancouver_trees
 
 ```{R}
 glimpse(vancouver_trees)
@@ -269,7 +269,7 @@ If we rewind and go back to the learning objectives, you'll see that by the end 
 2.2 For each of the 4 exercises that you complete, provide a *brief explanation* of why you chose that exercise in relation to your data (in other words, why does it make sense to do that?), and sufficient comments for a reader to understand your reasoning and code.
 
 <!-------------------------- Start your work below ---------------------------->
-**Exercise 1**
+#### Exercise 1
 
 I would like to know the distribution of tree diameter in the dataset (corresponding to Q1).
 
@@ -286,7 +286,7 @@ vancouver_trees %>%
 From the above graph, we can know that most trees' diameter are less than 100 and there are only 10 trees with diameter over 100.
 
 
-**Exercise 2**
+#### Exercise 2
 
 Next, I created a new variable `location` to combine longitude and latitude columns (corresponding to Q2), which makes the tree location clear.
 ```{R}
@@ -295,7 +295,7 @@ vancouver_trees %>%
   select(tree_id, location)
 ```
 
-**Exercise 3**
+#### Exercise 3
 
 I try to find the missing values in each variable and plot them (corresponding to Q3).
 
@@ -312,9 +312,9 @@ ggplot(na_count, aes(value, columns)) + geom_col()
 From the table and plot, we can see that there are 5 columns containing NA values, which are `plant_area`(1486), `longitude`(22771), `latitude`(22771), `date_planted`(76548), `cultivar_name`(67559).
 
 
-**Exercise 4**
+#### Exercise 4
 
-I want to make a new tibble with a subset of my data (corresponding to Q7), with `tree_id`, `diameter`, `height_range_id`, `genus_name`, `species_name`, `cultivar_name`, `common_name` and filter all `root_barrier='Y'` observations to further explore the relationship between these variables.
+I want to make a new tibble with a subset of my data (corresponding to Q7), with `tree_id`, `diameter`, `height_range_id`, `genus_name`, `species_name`, `cultivar_name`, `common_name` and filter all `root_barrier='N'` observations to further explore the relationship between these variables.
 
 ```{R}
 subset_vancouver_trees <- vancouver_trees %>%
@@ -336,13 +336,16 @@ So far, you have chosen a dataset and gotten familiar with it through exploring 
 
 > Is root barrier affecting the diameter of trees?
 
+
 **Question 2**
 
 > What is the most popular tree genus for each neighourhood?
 
+
 **Question 3**
 
 > What is the relationship between tree diameter and date_plant? Is it possible to predict tree diameter based on the variables like date_plant, genus, species?
+
 
 **Question 4**
 
@@ -378,7 +381,7 @@ Make sure it's clear what research question you are doing each operation for!
 
 <!------------------------- Start your work below ----------------------------->
 
-**Research question 1**
+#### Research question 1
 
 > Is root barrier affecting the diameter of trees?
 
@@ -405,7 +408,7 @@ ggplot(statistics_vancouver_trees, aes(root_barrier, mean)) +
 ```
 
 
-**Research question 2**
+#### Research question 2
 
 > Which neighourhood has the most different genus of trees?
 
@@ -439,7 +442,7 @@ genus_neighbourhood_vancouver_trees %>%
 ```
 
 
-**Research question 3**
+#### Research question 3
 
 > What is the relationship between tree diameter and date_plant? Is it possible to predict tree diameter based on the variables like date_plant, genus, species?
 
@@ -480,7 +483,7 @@ vancouver_trees %>%
 ```
 
 
-**Research question 4**
+#### Research question 4
 
 > Based on the locations of all trees, can we visualize the trees' map and apply clustering algorithms to find out the clusters of each genus?
 
@@ -525,6 +528,7 @@ The operations finished in task 3 have already answered my research question 1.
 From the summary statistics and graph, I already knew that the root barrier will significantly affect the diameter of trees because the mean and median diameter for root-barrier installed trees are much less than the uninstalled ones.
 
 
+
 **Research question 2:**
 
 > Which neighourhood has the most different genus of trees?
@@ -532,6 +536,7 @@ From the summary statistics and graph, I already knew that the root barrier will
 The operations finished in task 3 have already answered my research question 2.
 
 From the column graph, I can clearly see that the neighourhood *KITSILANO* has the most different genus of trees, which is 73.
+
 
 
 **Research question 3**
@@ -543,6 +548,7 @@ The operations finished in task 3 have partially answered my research question 3
 From the scatter graph I generated, we can see that the tree with earlier planted date tends to have larger diameter. However, predicting tree diameter should consider more variables, and data mining algorithms should be applied.
 
 
+
 **Research question 4**
 
 > Based on the locations of all trees, can we visualize the trees' map and apply clustering algorithms to find out the clusters of each genus?
@@ -551,7 +557,7 @@ The operations finished in task 3 have partially answered my research question 4
 
 Based on the longitude and latitude, I visualize the trees' map for the 5 most popular genus trees. Because there are lots of overlapping between these points, alpha transparency is applied to make them clear. 
 
-To be mentioned that some genus of tree distributions are quite dispersed that it is difficult (or meaningless) to find the clusters of them. Therefore, I would like to apply clustering algorithms only on particular tree genus with obvious clusters.
+To be mentioned that some genus of tree distributions are quite dispersed that it is difficult (or meaningless) to find the clusters of them. Therefore, I would like to adjust my question and apply clustering algorithms only on *particular* tree genus with obvious clusters (instead of every genus).
 
 
 <!----------------------------------------------------------------------------->

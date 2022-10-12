@@ -160,7 +160,7 @@ comments outside of the code chunk?
 
 <!-------------------------- Start your work below ---------------------------->
 
-**1. building_permits**
+#### 1. building_permits
 
 ``` r
 glimpse(building_permits)
@@ -207,7 +207,7 @@ And 3 different data types, including:
 -   date
 -   dbl
 
-**2. flow_sample**
+#### 2. flow_sample
 
 ``` r
 glimpse(flow_sample)
@@ -239,7 +239,7 @@ And 2 different data types, including:
 -   chr
 -   dbl
 
-**3. steam_games**
+#### 3. steam_games
 
 ``` r
 glimpse(steam_games)
@@ -299,7 +299,7 @@ And 2 different data types, including:
 -   chr
 -   dbl
 
-**4. vancouver_trees**
+#### 4. vancouver_trees
 
 ``` r
 glimpse(vancouver_trees)
@@ -497,7 +497,7 @@ comments for a reader to understand your reasoning and code.
 
 <!-------------------------- Start your work below ---------------------------->
 
-**Exercise 1**
+#### Exercise 1
 
 I would like to know the distribution of tree diameter in the dataset
 (corresponding to Q1).
@@ -534,7 +534,7 @@ vancouver_trees %>%
 From the above graph, we can know that most trees’ diameter are less
 than 100 and there are only 10 trees with diameter over 100.
 
-**Exercise 2**
+#### Exercise 2
 
 Next, I created a new variable `location` to combine longitude and
 latitude columns (corresponding to Q2), which makes the tree location
@@ -561,7 +561,7 @@ vancouver_trees %>%
     ## 10  149625 -123.089727, 49.234721
     ## # … with 146,601 more rows
 
-**Exercise 3**
+#### Exercise 3
 
 I try to find the missing values in each variable and plot them
 (corresponding to Q3).
@@ -608,12 +608,12 @@ From the table and plot, we can see that there are 5 columns containing
 NA values, which are `plant_area`(1486), `longitude`(22771),
 `latitude`(22771), `date_planted`(76548), `cultivar_name`(67559).
 
-**Exercise 4**
+#### Exercise 4
 
 I want to make a new tibble with a subset of my data (corresponding to
 Q7), with `tree_id`, `diameter`, `height_range_id`, `genus_name`,
 `species_name`, `cultivar_name`, `common_name` and filter all
-`root_barrier='Y'` observations to further explore the relationship
+`root_barrier='N'` observations to further explore the relationship
 between these variables.
 
 ``` r
@@ -723,7 +723,7 @@ for!
 
 <!------------------------- Start your work below ----------------------------->
 
-**Research question 1**
+#### Research question 1
 
 > Is root barrier affecting the diameter of trees?
 
@@ -761,7 +761,7 @@ ggplot(statistics_vancouver_trees, aes(root_barrier, mean)) +
 
 ![](mini-project-1_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
 
-**Research question 2**
+#### Research question 2
 
 > Which neighourhood has the most different genus of trees?
 
@@ -814,7 +814,7 @@ genus_neighbourhood_vancouver_trees %>%
 
 ![](mini-project-1_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
 
-**Research question 3**
+#### Research question 3
 
 > What is the relationship between tree diameter and date_plant? Is it
 > possible to predict tree diameter based on the variables like
@@ -871,7 +871,7 @@ vancouver_trees %>%
 
 ![](mini-project-1_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
 
-**Research question 4**
+#### Research question 4
 
 > Based on the locations of all trees, can we visualize the trees’ map
 > and apply clustering algorithms to find out the clusters of each
@@ -987,8 +987,9 @@ between these points, alpha transparency is applied to make them clear.
 
 To be mentioned that some genus of tree distributions are quite
 dispersed that it is difficult (or meaningless) to find the clusters of
-them. Therefore, I would like to apply clustering algorithms only on
-particular tree genus with obvious clusters.
+them. Therefore, I would like to adjust my question and apply clustering
+algorithms only on *particular* tree genus with obvious clusters
+(instead of every genus).
 
 <!----------------------------------------------------------------------------->
 
