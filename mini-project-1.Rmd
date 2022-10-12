@@ -332,22 +332,22 @@ So far, you have chosen a dataset and gotten familiar with it through exploring 
 
 <!--- *****START HERE***** --->
 
-**Question 1**
+**Research question 1:**
 
 > Is root barrier affecting the diameter of trees?
 
 
-**Question 2**
+**Research question 2:**
 
 > What is the most popular tree genus for each neighourhood?
 
 
-**Question 3**
+**Research question 3:**
 
 > What is the relationship between tree diameter and date_plant? Is it possible to predict tree diameter based on the variables like date_plant, genus, species?
 
 
-**Question 4**
+**Research question 4:**
 
 > Based on the given tree's location, can we visualize the trees' map and apply clustering algorithms to find out the clusters of each genus?
 
