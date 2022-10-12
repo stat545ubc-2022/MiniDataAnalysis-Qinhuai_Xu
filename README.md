@@ -1,2 +1,2 @@
 # MiniDataAnalysis-Qinhuai_Xu
-**This is the project for Mini-Data Analysis - Milestone 1**
+**This is my project for Mini-Data Analysis - Milestone 1**
