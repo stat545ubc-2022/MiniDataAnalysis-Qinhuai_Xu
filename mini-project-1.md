@@ -724,7 +724,7 @@ for!
 
 <!------------------------- Start your work below ----------------------------->
 
-**Question 1**
+**Research question 1**
 
 > Is root barrier affecting the diameter of trees?
 
@@ -762,7 +762,7 @@ ggplot(statistics_vancouver_trees, aes(root_barrier, mean)) +
 
 ![](mini-project-1_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
 
-**Question 2**
+**Research question 2**
 
 > Which neighourhood has the most different genus of trees?
 
@@ -815,7 +815,7 @@ genus_neighbourhood_vancouver_trees %>%
 
 ![](mini-project-1_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
 
-**Question 3**
+**Research question 3**
 
 > What is the relationship between tree diameter and date_plant? Is it
 > possible to predict tree diameter based on the variables like
@@ -870,13 +870,9 @@ vancouver_trees %>%
   xlab("date_planted")
 ```
 
-    ## Warning: Transformation introduced infinite values in continuous y-axis
-
-    ## Warning: Removed 76548 rows containing missing values (geom_point).
-
 ![](mini-project-1_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
 
-**Question 4**
+**Research question 4**
 
 > Based on the locations of all trees, can we visualize the trees’ map
 > and apply clustering algorithms to find out the clusters of each
@@ -924,13 +920,8 @@ which genus these points are belonging to.
 vancouver_trees %>%
   filter(genus_name == c("ACER", "PRUNUS", "FRAXINUS", "TILIA", "QUERCUS")) %>%
   ggplot(aes(x = longitude, y = latitude, color = genus_name)) +
-  geom_point(alpha = 0.5, size = 0.8)
+  geom_point(alpha = 0.5, size = 0.9)
 ```
-
-    ## Warning in genus_name == c("ACER", "PRUNUS", "FRAXINUS", "TILIA", "QUERCUS"): 长
-    ## 的对象长度不是短的对象长度的整倍数
-
-    ## Warning: Removed 2318 rows containing missing values (geom_point).
 
 ![](mini-project-1_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
 
@@ -945,6 +936,61 @@ refined, now that you’ve investigated your data a bit more? Which
 research questions are yielding interesting results?
 
 <!-------------------------- Start your work below ---------------------------->
+
+**Research question 1:**
+
+> Is root barrier affecting the diameter of trees?
+
+The operations finished in task 3 have already answered my research
+question 1.
+
+From the summary statistics and graph, I already knew that the root
+barrier will significantly affect the diameter of trees because the mean
+and median diameter for root-barrier installed trees are much less than
+the uninstalled ones.
+
+**Research question 2:**
+
+> Which neighourhood has the most different genus of trees?
+
+The operations finished in task 3 have already answered my research
+question 2.
+
+From the column graph, I can clearly see that the neighourhood
+*KITSILANO* has the most different genus of trees, which is 73.
+
+**Research question 3**
+
+> What is the relationship between tree diameter and date_plant? Is it
+> possible to predict tree diameter based on the variables like
+> date_plant, genus, species?
+
+The operations finished in task 3 have partially answered my research
+question 3.
+
+From the scatter graph I generated, we can see that the tree with
+earlier planted date tends to have larger diameter. However, predicting
+tree diameter should consider more variables, and data mining algorithms
+should be applied.
+
+**Research question 4**
+
+> Based on the locations of all trees, can we visualize the trees’ map
+> and apply clustering algorithms to find out the clusters of each
+> genus?
+
+The operations finished in task 3 have partially answered my research
+question 4.
+
+Based on the longitude and latitude, I visualize the trees’ map for the
+5 most popular genus trees. Because there are lots of overlapping
+between these points, I applied alpha transparency to make them clear. I
+noticed that some genus of tree distributions are quite dispersed that
+it is difficult (or meaningless) to find the clusters of them.
+
+Therefore, I would like to apply clustering algorithms only on
+particular tree genus with obvious clusters.
+
 <!----------------------------------------------------------------------------->
 
 ### Attribution
