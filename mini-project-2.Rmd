@@ -90,13 +90,13 @@ Be sure to explain your reasoning for this task. Show us the "before" and "after
 
 <!--------------------------- Start your work below --------------------------->
 
-* Before modification: *
+**Before modification:**
 
 ```{R}
 glimpse(vancouver_trees)
 ```
 
-* Tidy the data: *
+**Tidy the data:**
 
 ```{R}
 # Combine civic_number and std_street to associated_address
@@ -114,13 +114,13 @@ vancouver_trees <- vancouver_trees %>%
   unite(col = coordinates, c(longitude, latitude), sep = ",")
 ```
 
-* After modification: *
+**After modification:**
 
 ```{R}
 glimpse(vancouver_trees)
 ```
 
-* Untidy it back: *
+**Untidy it back:**
 
 ```{R}
 vancouver_trees <- vancouver_trees %>%
@@ -135,7 +135,7 @@ vancouver_trees <- vancouver_trees %>%
   separate(col = coordinates, c("longitude", "latitude"), sep = ",")
 ```
 
-* After untidying back: *
+**After untidying back:**
 
 ```{R}
 glimpse(vancouver_trees)

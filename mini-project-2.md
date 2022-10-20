@@ -144,7 +144,7 @@ and “after”.
 
 <!--------------------------- Start your work below --------------------------->
 
-- Before modification: \*
+**Before modification:**
 
 ``` r
 glimpse(vancouver_trees)
@@ -173,7 +173,7 @@ glimpse(vancouver_trees)
     ## $ longitude          <dbl> -123.1161, -123.1147, -123.0846, -123.0870, -123.08…
     ## $ latitude           <dbl> 49.21776, 49.21776, 49.23938, 49.23469, 49.23894, 4…
 
-- Tidy the data: \*
+**Tidy the data:**
 
 ``` r
 # Combine civic_number and std_street to associated_address
@@ -191,7 +191,7 @@ vancouver_trees <- vancouver_trees %>%
   unite(col = coordinates, c(longitude, latitude), sep = ",")
 ```
 
-- After modification: \*
+**After modification:**
 
 ``` r
 glimpse(vancouver_trees)
@@ -217,7 +217,7 @@ glimpse(vancouver_trees)
     ## $ date_planted       <date> 1999-01-13, 1996-05-31, 1993-11-22, 1996-04-29, 19…
     ## $ coordinates        <chr> "-123.116113,49.217763", "-123.114718,49.217759", "…
 
-- Untidy it back: \*
+**Untidy it back:**
 
 ``` r
 vancouver_trees <- vancouver_trees %>%
@@ -232,7 +232,7 @@ vancouver_trees <- vancouver_trees %>%
   separate(col = coordinates, c("longitude", "latitude"), sep = ",")
 ```
 
-- After untidying back: \*
+**After untidying back:**
 
 ``` r
 glimpse(vancouver_trees)
