@@ -40,19 +40,19 @@ library(tidyverse)
 
 ## For Both Milestones
 
--   Each milestone is worth 45 points. The number of points allocated to
-    each task will be annotated within each deliverable. Tasks that are
-    more challenging will often be allocated more points.
+- Each milestone is worth 45 points. The number of points allocated to
+  each task will be annotated within each deliverable. Tasks that are
+  more challenging will often be allocated more points.
 
--   10 points will be allocated to the reproducibility, cleanliness, and
-    coherence of the overall analysis. While the two milestones will be
-    submitted as independent deliverables, the analysis itself is a
-    continuum - think of it as two chapters to a story. Each chapter, or
-    in this case, portion of your analysis, should be easily followed
-    through by someone unfamiliar with the content.
-    [Here](https://swcarpentry.github.io/r-novice-inflammation/06-best-practices-R/)
-    is a good resource for what constitutes “good code”. Learning good
-    coding practices early in your career will save you hassle later on!
+- 10 points will be allocated to the reproducibility, cleanliness, and
+  coherence of the overall analysis. While the two milestones will be
+  submitted as independent deliverables, the analysis itself is a
+  continuum - think of it as two chapters to a story. Each chapter, or
+  in this case, portion of your analysis, should be easily followed
+  through by someone unfamiliar with the content.
+  [Here](https://swcarpentry.github.io/r-novice-inflammation/06-best-practices-R/)
+  is a good resource for what constitutes “good code”. Learning good
+  coding practices early in your career will save you hassle later on!
 
 ## For Milestone 1
 
@@ -76,11 +76,11 @@ for tagging your release on Github.
 
 By the end of this milestone, you should:
 
--   Become familiar with your dataset of choosing
--   Select 4 questions that you would like to answer with your data
--   Generate a reproducible and clear report using R Markdown
--   Become familiar with manipulating and summarizing your data in
-    tibbles using `dplyr`, with a research question in mind.
+- Become familiar with your dataset of choosing
+- Select 4 questions that you would like to answer with your data
+- Generate a reproducible and clear report using R Markdown
+- Become familiar with manipulating and summarizing your data in tibbles
+  using `dplyr`, with a research question in mind.
 
 # Task 1: Choose your favorite dataset (10 points)
 
@@ -88,42 +88,42 @@ The `datateachr` package by Hayley Boyce and Jordan Bourak currently
 composed of 7 semi-tidy datasets for educational purposes. Here is a
 brief description of each dataset:
 
--   *apt_buildings*: Acquired courtesy of The City of Toronto’s Open
-    Data Portal. It currently has 3455 rows and 37 columns.
+- *apt_buildings*: Acquired courtesy of The City of Toronto’s Open Data
+  Portal. It currently has 3455 rows and 37 columns.
 
--   *building_permits*: Acquired courtesy of The City of Vancouver’s
-    Open Data Portal. It currently has 20680 rows and 14 columns.
+- *building_permits*: Acquired courtesy of The City of Vancouver’s Open
+  Data Portal. It currently has 20680 rows and 14 columns.
 
--   *cancer_sample*: Acquired courtesy of UCI Machine Learning
-    Repository. It currently has 569 rows and 32 columns.
+- *cancer_sample*: Acquired courtesy of UCI Machine Learning Repository.
+  It currently has 569 rows and 32 columns.
 
--   *flow_sample*: Acquired courtesy of The Government of Canada’s
-    Historical Hydrometric Database. It currently has 218 rows and 7
-    columns.
+- *flow_sample*: Acquired courtesy of The Government of Canada’s
+  Historical Hydrometric Database. It currently has 218 rows and 7
+  columns.
 
--   *parking_meters*: Acquired courtesy of The City of Vancouver’s Open
-    Data Portal. It currently has 10032 rows and 22 columns.
+- *parking_meters*: Acquired courtesy of The City of Vancouver’s Open
+  Data Portal. It currently has 10032 rows and 22 columns.
 
--   *steam_games*: Acquired courtesy of Kaggle. It currently has 40833
-    rows and 21 columns.
+- *steam_games*: Acquired courtesy of Kaggle. It currently has 40833
+  rows and 21 columns.
 
--   *vancouver_trees*: Acquired courtesy of The City of Vancouver’s Open
-    Data Portal. It currently has 146611 rows and 20 columns.
+- *vancouver_trees*: Acquired courtesy of The City of Vancouver’s Open
+  Data Portal. It currently has 146611 rows and 20 columns.
 
 **Things to keep in mind**
 
--   We hope that this project will serve as practice for carrying our
-    your own *independent* data analysis. Remember to comment your code,
-    be explicit about what you are doing, and write notes in this
-    markdown document when you feel that context is required. As you
-    advance in the project, prompts and hints to do this will be
-    diminished - it’ll be up to you!
+- We hope that this project will serve as practice for carrying our your
+  own *independent* data analysis. Remember to comment your code, be
+  explicit about what you are doing, and write notes in this markdown
+  document when you feel that context is required. As you advance in the
+  project, prompts and hints to do this will be diminished - it’ll be up
+  to you!
 
--   Before choosing a dataset, you should always keep in mind **your
-    goal**, or in other ways, *what you wish to achieve with this data*.
-    This mini data-analysis project focuses on *data wrangling*,
-    *tidying*, and *visualization*. In short, it’s a way for you to get
-    your feet wet with exploring data on your own.
+- Before choosing a dataset, you should always keep in mind **your
+  goal**, or in other ways, *what you wish to achieve with this data*.
+  This mini data-analysis project focuses on *data wrangling*,
+  *tidying*, and *visualization*. In short, it’s a way for you to get
+  your feet wet with exploring data on your own.
 
 And that is exactly the first thing that you will do!
 
@@ -186,26 +186,26 @@ glimpse(building_permits)
 There are 20680 rows and 14 columns in the dataset `building_permits`,
 including:
 
--   permit_number
--   issue_date
--   project_value
--   type_of_work
--   address
--   project_description
--   building_contractor
--   building_contractor_address
--   applicant
--   applicant_address
--   property_use
--   specific_use_category
--   year
--   bi_id
+- permit_number
+- issue_date
+- project_value
+- type_of_work
+- address
+- project_description
+- building_contractor
+- building_contractor_address
+- applicant
+- applicant_address
+- property_use
+- specific_use_category
+- year
+- bi_id
 
 And 3 different data types, including:
 
--   chr
--   date
--   dbl
+- chr
+- date
+- dbl
 
 #### 2. flow_sample
 
@@ -226,18 +226,18 @@ glimpse(flow_sample)
 There are 218 rows and 7 columns in the dataset `flow_sample`,
 including:
 
--   station_id
--   year
--   extreme_type
--   month
--   day
--   flow
--   sym
+- station_id
+- year
+- extreme_type
+- month
+- day
+- flow
+- sym
 
 And 2 different data types, including:
 
--   chr
--   dbl
+- chr
+- dbl
 
 #### 3. steam_games
 
@@ -272,32 +272,32 @@ glimpse(steam_games)
 There are 40833 rows and 21 columns in the dataset `steam_games`,
 including:
 
--   id
--   url
--   types
--   name
--   desc_snippet
--   recent_reviews
--   all_reviews
--   release_date
--   developer
--   publisher
--   popular_tags
--   game_details
--   languages
--   achievements
--   genre
--   game_description
--   mature_content
--   minimum_requirements
--   recommended_requirements
--   original_price
--   discount_price
+- id
+- url
+- types
+- name
+- desc_snippet
+- recent_reviews
+- all_reviews
+- release_date
+- developer
+- publisher
+- popular_tags
+- game_details
+- languages
+- achievements
+- genre
+- game_description
+- mature_content
+- minimum_requirements
+- recommended_requirements
+- original_price
+- discount_price
 
 And 2 different data types, including:
 
--   chr
--   dbl
+- chr
+- dbl
 
 #### 4. vancouver_trees
 
@@ -331,32 +331,32 @@ glimpse(vancouver_trees)
 There are 146611 rows and 20 columns in the dataset `vancouver_trees`,
 including:
 
--   tree_id
--   civic_number
--   std_street
--   genus_name
--   species_name
--   cultivar_name
--   common_name
--   assigned
--   root_barrier
--   plant_area
--   on_street_block
--   on_street
--   neighbourhood_name
--   street_side_name
--   height_range_id
--   diameter
--   curb
--   date_planted
--   longitude
--   latitude
+- tree_id
+- civic_number
+- std_street
+- genus_name
+- species_name
+- cultivar_name
+- common_name
+- assigned
+- root_barrier
+- plant_area
+- on_street_block
+- on_street
+- neighbourhood_name
+- street_side_name
+- height_range_id
+- diameter
+- curb
+- date_planted
+- longitude
+- latitude
 
 And 3 different data types, including:
 
--   chr
--   date
--   dbl
+- chr
+- date
+- dbl
 
 <!----------------------------------------------------------------------------->
 
