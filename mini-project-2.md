@@ -68,6 +68,7 @@ Begin by loading your data and the tidyverse package below:
 ``` r
 library(datateachr) # <- might contain the data you picked!
 library(tidyverse)
+library(here)
 ```
 
 # Task 1: Tidy your data (15 points)
@@ -144,7 +145,7 @@ and “after”.
 
 <!--------------------------- Start your work below --------------------------->
 
-**Before modification:**
+**Dataset before modification:**
 
 ``` r
 glimpse(vancouver_trees)
@@ -173,7 +174,7 @@ glimpse(vancouver_trees)
     ## $ longitude          <dbl> -123.1161, -123.1147, -123.0846, -123.0870, -123.08…
     ## $ latitude           <dbl> 49.21776, 49.21776, 49.23938, 49.23469, 49.23894, 4…
 
-**Tidy the data:**
+**Operations for tidying the data:**
 
 ``` r
 # Combine civic_number and std_street to associated_address
@@ -191,7 +192,7 @@ vancouver_trees <- vancouver_trees %>%
   unite(col = coordinates, c(longitude, latitude), sep = ",")
 ```
 
-**After modification:**
+**Dataset after modification:**
 
 ``` r
 glimpse(vancouver_trees)
@@ -217,7 +218,7 @@ glimpse(vancouver_trees)
     ## $ date_planted       <date> 1999-01-13, 1996-05-31, 1993-11-22, 1996-04-29, 19…
     ## $ coordinates        <chr> "-123.116113,49.217763", "-123.114718,49.217759", "…
 
-**Untidy it back:**
+**Operations for untidying it back:**
 
 ``` r
 vancouver_trees <- vancouver_trees %>%
@@ -230,9 +231,15 @@ vancouver_trees <- vancouver_trees %>%
 
 vancouver_trees <- vancouver_trees %>%
   separate(col = coordinates, c("longitude", "latitude"), sep = ",")
+
+
+vancouver_trees$civic_number <- as.numeric(vancouver_trees$civic_number)
+vancouver_trees$on_street_block <- as.numeric(vancouver_trees$on_street_block)
+vancouver_trees$longitude <- as.numeric(vancouver_trees$longitude)
+vancouver_trees$latitude <- as.numeric(vancouver_trees$latitude)
 ```
 
-**After untidying back:**
+**Dataset after untidying back:**
 
 ``` r
 glimpse(vancouver_trees)
@@ -241,7 +248,7 @@ glimpse(vancouver_trees)
     ## Rows: 146,611
     ## Columns: 20
     ## $ tree_id            <dbl> 149556, 149563, 149579, 149590, 149604, 149616, 149…
-    ## $ civic_number       <chr> "494", "450", "4994", "858", "5032", "585", "4909",…
+    ## $ civic_number       <dbl> 494, 450, 4994, 858, 5032, 585, 4909, 4925, 4969, 7…
     ## $ std_street         <chr> "W 58TH AV", "W 58TH AV", "WINDSOR ST", "E 39TH AV"…
     ## $ genus_name         <chr> "ULMUS", "ZELKOVA", "STYRAX", "FRAXINUS", "ACER", "…
     ## $ species_name       <chr> "AMERICANA", "SERRATA", "JAPONICA", "AMERICANA", "C…
@@ -250,7 +257,7 @@ glimpse(vancouver_trees)
     ## $ assigned           <chr> "N", "N", "N", "Y", "N", "N", "N", "N", "N", "N", "…
     ## $ root_barrier       <chr> "N", "N", "N", "N", "N", "N", "N", "N", "N", "N", "…
     ## $ plant_area         <chr> "N", "N", "4", "4", "4", "B", "6", "6", "3", "3", "…
-    ## $ on_street_block    <chr> "400", "400", "4900", "800", "5000", "500", "4900",…
+    ## $ on_street_block    <dbl> 400, 400, 4900, 800, 5000, 500, 4900, 4900, 4900, 7…
     ## $ on_street          <chr> "W 58TH AV", "W 58TH AV", "WINDSOR ST", "E 39TH AV"…
     ## $ neighbourhood_name <chr> "MARPOLE", "MARPOLE", "KENSINGTON-CEDAR COTTAGE", "…
     ## $ street_side_name   <chr> "EVEN", "EVEN", "EVEN", "EVEN", "EVEN", "ODD", "ODD…
@@ -258,8 +265,8 @@ glimpse(vancouver_trees)
     ## $ diameter           <dbl> 10.00, 10.00, 4.00, 18.00, 9.00, 5.00, 15.00, 14.00…
     ## $ curb               <chr> "N", "N", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "…
     ## $ date_planted       <date> 1999-01-13, 1996-05-31, 1993-11-22, 1996-04-29, 19…
-    ## $ longitude          <chr> "-123.116113", "-123.114718", "-123.084553", "-123.…
-    ## $ latitude           <chr> "49.217763", "49.217759", "49.239375", "49.234688",…
+    ## $ longitude          <dbl> -123.1161, -123.1147, -123.0846, -123.0870, -123.08…
+    ## $ latitude           <dbl> 49.21776, 49.21776, 49.23938, 49.23469, 49.23894, 4…
 
 <!----------------------------------------------------------------------------->
 
@@ -272,14 +279,24 @@ analysis in the next four tasks:
 
 <!-------------------------- Start your work below ---------------------------->
 
-1.  *FILL_THIS_IN*
-2.  *FILL_THIS_IN*
+1.  *Is root barrier affecting the diameter of trees? Is there any
+    relationship between root_barrier, and tree genus/species?*
+2.  *What is the relationship between tree diameter and date_plant? Is
+    it possible to predict tree diameter based on the variables like
+    date_plant, genus, species?*
 
 <!----------------------------------------------------------------------------->
 
 Explain your decision for choosing the above two research questions.
 
 <!--------------------------- Start your work below --------------------------->
+
+I found above two research questions are more interesting to explore and
+more related to our course content. The second research question
+Milestone 1 has been solved in. The fourth question should be solved by
+applying clustering algorithm, which does not relate to this course
+content.
+
 <!----------------------------------------------------------------------------->
 
 Now, try to choose a version of your data that you think will be
@@ -288,6 +305,223 @@ that we’ve covered so far (i.e. by filtering, cleaning, tidy’ing,
 dropping irrelevant columns, etc.).
 
 <!--------------------------- Start your work below --------------------------->
+
+**Research question 1:**
+
+> Is root barrier affecting the diameter of trees? Is there any
+> relationship between root_barrier, and tree genus/species?
+
+First, I try to know the number of root_barrier-installed trees for each
+genus, therefore, I only keep `genus_name`, `root_barrier`, `diameter`
+columns and drop the others.
+
+``` r
+genus_root_barrier_diameter_vancouver_trees <- vancouver_trees %>%
+  select(genus_name, root_barrier, diameter)
+  
+
+
+number_of_root_barrier <- genus_root_barrier_diameter_vancouver_trees %>%
+  filter(root_barrier == 'Y') %>%
+  group_by(genus_name) %>%
+  count() %>%
+  arrange(desc(n)) 
+
+number_of_root_barrier
+```
+
+    ## # A tibble: 45 × 2
+    ## # Groups:   genus_name [45]
+    ##    genus_name     n
+    ##    <chr>      <int>
+    ##  1 ACER        3109
+    ##  2 PRUNUS       898
+    ##  3 CARPINUS     664
+    ##  4 FRAXINUS     546
+    ##  5 FAGUS        473
+    ##  6 PYRUS        414
+    ##  7 CRATAEGUS    403
+    ##  8 PARROTIA     368
+    ##  9 SORBUS       362
+    ## 10 SYRINGA      253
+    ## # … with 35 more rows
+
+Next, I try to compare the diameter of root_barrier-installed trees with
+the uninstalled ones for each genus.
+
+``` r
+mean_diameter_root_barrier <- genus_root_barrier_diameter_vancouver_trees %>%
+  group_by(root_barrier, genus_name) %>%
+  summarise(Mean = mean(diameter)) %>%
+  pivot_wider(names_from = root_barrier, values_from = Mean)
+```
+
+    ## `summarise()` has grouped output by 'root_barrier'. You can override using the
+    ## `.groups` argument.
+
+``` r
+mean_diameter_root_barrier
+```
+
+    ## # A tibble: 97 × 3
+    ##    genus_name      N     Y
+    ##    <chr>       <dbl> <dbl>
+    ##  1 ABIES       13.0   3   
+    ##  2 ACER        11.2   4.64
+    ##  3 AESCULUS    23.9   9.31
+    ##  4 AILANTHUS   15.9  NA   
+    ##  5 ALBIZIA      6    NA   
+    ##  6 ALNUS       17.5  NA   
+    ##  7 AMELANCHIER  3.22  2.5 
+    ##  8 ARALIA       6.81 NA   
+    ##  9 ARAUCARIA   11.4  NA   
+    ## 10 ARBUTUS     18.4  NA   
+    ## # … with 87 more rows
+
+Then, I try to find out the genus with a larger mean diameter for
+root_barrier-installed trees.
+
+``` r
+mean_diameter_root_barrier %>%
+  filter(Y > N)
+```
+
+    ## # A tibble: 6 × 3
+    ##   genus_name        N     Y
+    ##   <chr>         <dbl> <dbl>
+    ## 1 CERCIS         3.38  4.06
+    ## 2 CHAMAECYPARIS 17.9  19   
+    ## 3 METASEQUOIA   12.9  17.8 
+    ## 4 PARROTIA       4.00  4.09
+    ## 5 PICEA         11.0  16.3 
+    ## 6 THUJA         17.5  38
+
+There are 6 genus with a longer mean diameter for root_barrier-installed
+trees. I want to know the potential reason.
+
+``` r
+number_of_root_barrier %>%
+  filter(genus_name %in% c("CERCIS", "CHAMAECYPARIS", "METASEQUOIA", "PARROTIA", "PICEA", "THUJA"))
+```
+
+    ## # A tibble: 6 × 2
+    ## # Groups:   genus_name [6]
+    ##   genus_name        n
+    ##   <chr>         <int>
+    ## 1 PARROTIA        368
+    ## 2 CERCIS           40
+    ## 3 METASEQUOIA       6
+    ## 4 PICEA             3
+    ## 5 CHAMAECYPARIS     1
+    ## 6 THUJA             1
+
+Genus “METASEQUOIA”, “PICEA”, “CHAMAECYPARIS”, “THUJA” have a longer
+mean diameter because there are few observations for them. However,
+“PARROTIA” and “CERCIS” maybe special cases.
+
+**Research question 2:**
+
+> What is the relationship between tree diameter and date_plant? Is it
+> possible to predict tree diameter based on the variables like
+> date_plant, genus, species?
+
+Not only date_plant, the other colmuns like tree genus, species, or
+cultivar may also impact the tree diameter. I try to explore the tree
+diameter statistics under different tree genus, species, or cultivar.
+
+First, I only keep `genus`, `species`, `cultivar`, `diameter` columns
+and drop the others.
+
+``` r
+genus_species_cultivar_diameter_vancouver_trees <- vancouver_trees %>%
+  select(genus_name, species_name, cultivar_name, diameter)
+
+genus_species_cultivar_diameter_vancouver_trees
+```
+
+    ## # A tibble: 146,611 × 4
+    ##    genus_name species_name cultivar_name   diameter
+    ##    <chr>      <chr>        <chr>              <dbl>
+    ##  1 ULMUS      AMERICANA    BRANDON             10  
+    ##  2 ZELKOVA    SERRATA      <NA>                10  
+    ##  3 STYRAX     JAPONICA     <NA>                 4  
+    ##  4 FRAXINUS   AMERICANA    AUTUMN APPLAUSE     18  
+    ##  5 ACER       CAMPESTRE    <NA>                 9  
+    ##  6 PYRUS      CALLERYANA   CHANTICLEER          5  
+    ##  7 ACER       PLATANOIDES  COLUMNARE           15  
+    ##  8 ACER       PLATANOIDES  COLUMNARE           14  
+    ##  9 ACER       PLATANOIDES  COLUMNARE           16  
+    ## 10 FRAXINUS   AMERICANA    AUTUMN APPLAUSE      7.5
+    ## # … with 146,601 more rows
+
+``` r
+genus_species_cultivar_diameter_vancouver_trees %>%
+  group_by(genus_name) %>%
+  summarise(max(diameter), min(diameter), mean(diameter))
+```
+
+    ## # A tibble: 97 × 4
+    ##    genus_name  `max(diameter)` `min(diameter)` `mean(diameter)`
+    ##    <chr>                 <dbl>           <dbl>            <dbl>
+    ##  1 ABIES                  42.5               1            12.9 
+    ##  2 ACER                  317                 0            10.6 
+    ##  3 AESCULUS               64                 0            23.7 
+    ##  4 AILANTHUS              21.5               3            15.9 
+    ##  5 ALBIZIA                 6                 6             6   
+    ##  6 ALNUS                  40                 0            17.5 
+    ##  7 AMELANCHIER            20                 0             3.21
+    ##  8 ARALIA                 12                 3             6.81
+    ##  9 ARAUCARIA              32                 3            11.4 
+    ## 10 ARBUTUS                33                 6            18.4 
+    ## # … with 87 more rows
+
+``` r
+genus_species_cultivar_diameter_vancouver_trees %>%
+  group_by(species_name) %>%
+  summarise(max(diameter), min(diameter), mean(diameter))
+```
+
+    ## # A tibble: 283 × 4
+    ##    species_name   `max(diameter)` `min(diameter)` `mean(diameter)`
+    ##    <chr>                    <dbl>           <dbl>            <dbl>
+    ##  1 ABIES                     35               2              12.9 
+    ##  2 ACERIFOLIA   X            57               2              20.8 
+    ##  3 ACUMINATA                 28               2              10.9 
+    ##  4 ACUTISSIMA                36               2               8.87
+    ##  5 AILANTHIFOLIA             40              24              32   
+    ##  6 ALBA                      40               1.5            19.4 
+    ##  7 ALBA-SINENSIS             10               7               8.67
+    ##  8 ALNIFOLIA                 20.2             2               5.23
+    ##  9 ALPINUM                    8               8               8   
+    ## 10 ALTISSIMA                 21.5             3              15.9 
+    ## # … with 273 more rows
+
+``` r
+genus_species_cultivar_diameter_vancouver_trees %>%
+  group_by(cultivar_name) %>%
+  summarise(max(diameter), min(diameter), mean(diameter))
+```
+
+    ## # A tibble: 294 × 4
+    ##    cultivar_name   `max(diameter)` `min(diameter)` `mean(diameter)`
+    ##    <chr>                     <dbl>           <dbl>            <dbl>
+    ##  1 ACCOLADE                   42              3               20.8 
+    ##  2 AKEBONO                    66              0                7.76
+    ##  3 ALIA                        5.5            5                5.33
+    ##  4 ALLGOLD                    11.5            2                3.81
+    ##  5 ALMIRA                     29              5               17.4 
+    ##  6 AMANOGAWA                  26              3                8.52
+    ##  7 AMERICAN BEAUTY             6              4                5.33
+    ##  8 APOLLO                      3              3                3   
+    ##  9 ARIE PETERS                30              0                3.98
+    ## 10 ARISTOCRAT                 12              0.75             4.92
+    ## # … with 284 more rows
+
+From the above statistics, we can see that the diameters under different
+genus, species, cultivar also differs a lot. Therefore, We can predict
+specific tree diameter based on the data in same genus, species,
+cultivar.
+
 <!----------------------------------------------------------------------------->
 
 # Task 2: Special Data Types (10)
@@ -303,6 +537,17 @@ you’d like). If you don’t have such a plot, you’ll need to make one.
 Place the code for your plot below.
 
 <!-------------------------- Start your work below ---------------------------->
+
+``` r
+vancouver_trees$height_range_id <- as.character(vancouver_trees$height_range_id)
+
+vancouver_trees %>%
+  ggplot(aes(x = height_range_id, fill = root_barrier)) +
+    geom_bar()
+```
+
+![](mini-project-2_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+
 <!----------------------------------------------------------------------------->
 
 Now, choose two of the following tasks.
@@ -346,12 +591,39 @@ Now, choose two of the following tasks.
 
 <!-------------------------- Start your work below ---------------------------->
 
-**Task Number**: FILL_THIS_IN
+**Task Number**: Task 1
+
+I would like to reorder the `height_range_id` in numeric order to make
+it looks more clear.
+
+``` r
+vancouver_trees %>%
+  mutate(height_range_id = fct_relevel(height_range_id, "0","1","2","3","4","5","6","7","8","9","10")) %>%
+  ggplot(aes(x = height_range_id, fill = root_barrier)) +
+    geom_bar()
+```
+
+![](mini-project-2_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
 
 <!----------------------------------------------------------------------------->
 <!-------------------------- Start your work below ---------------------------->
 
-**Task Number**: FILL_THIS_IN
+**Task Number**: Task 2
+
+I would like to group some height_range_id levels together into an
+“other” category because there are few samples in
+`height_range_id = 0, 9, 10`. These samples maybe special cases or
+errors, which will not be considered in my future research.
+
+``` r
+vancouver_trees %>%
+  mutate(height_range_id = fct_relevel(height_range_id, "0","1","2","3","4","5","6","7","8","9","10")) %>%
+  mutate(height_range_id = fct_lump(height_range_id, n = 8)) %>%
+  ggplot(aes(x = height_range_id, fill = root_barrier)) +
+    geom_bar()
+```
+
+![](mini-project-2_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
 
 <!----------------------------------------------------------------------------->
 
@@ -364,9 +636,10 @@ Pick a research question, and pick a variable of interest (we’ll call it
 
 <!-------------------------- Start your work below ---------------------------->
 
-**Research Question**: FILL_THIS_IN
+**Research Question**: Is it possible to predict tree diameter based on
+the variables like date_plant, genus?
 
-**Variable of interest**: FILL_THIS_IN
+**Variable of interest**: diameter
 
 <!----------------------------------------------------------------------------->
 
@@ -390,6 +663,48 @@ specifics in STAT 545.
   - You could use `lm()` to test for significance of regression.
 
 <!-------------------------- Start your work below ---------------------------->
+
+I try to fit the model to predict the root-installed “PRUNUS” genus tree
+diameter based on their plant date.
+
+``` r
+PRUNUS_vancouver_trees <- vancouver_trees %>%
+  select(diameter, date_planted, genus_name, root_barrier) %>%
+  filter(genus_name == "PRUNUS", root_barrier == "Y") %>%
+  drop_na()
+
+PRUNUS_vancouver_trees
+```
+
+    ## # A tibble: 882 × 4
+    ##    diameter date_planted genus_name root_barrier
+    ##       <dbl> <date>       <chr>      <chr>       
+    ##  1     7    2005-12-01   PRUNUS     Y           
+    ##  2     7    2005-12-01   PRUNUS     Y           
+    ##  3     5    2005-12-01   PRUNUS     Y           
+    ##  4     5    2005-12-01   PRUNUS     Y           
+    ##  5     8.5  2005-12-09   PRUNUS     Y           
+    ##  6     5    2007-01-18   PRUNUS     Y           
+    ##  7     5    2006-01-12   PRUNUS     Y           
+    ##  8     3    2006-01-13   PRUNUS     Y           
+    ##  9     3.25 2007-01-16   PRUNUS     Y           
+    ## 10     8    2006-01-24   PRUNUS     Y           
+    ## # … with 872 more rows
+
+``` r
+M <- lm(diameter ~ date_planted, PRUNUS_vancouver_trees)
+
+print(M)
+```
+
+    ## 
+    ## Call:
+    ## lm(formula = diameter ~ date_planted, data = PRUNUS_vancouver_trees)
+    ## 
+    ## Coefficients:
+    ##  (Intercept)  date_planted  
+    ##   15.0133044    -0.0007342
+
 <!----------------------------------------------------------------------------->
 
 ## 2.2 (5 points)
@@ -407,6 +722,19 @@ Y, or a single value like a regression coefficient or a p-value.
   which broom function is not compatible.
 
 <!-------------------------- Start your work below ---------------------------->
+
+`broom` package is used to obtain model results.
+
+``` r
+broom::tidy(M)
+```
+
+    ## # A tibble: 2 × 5
+    ##   term          estimate std.error statistic  p.value
+    ##   <chr>            <dbl>     <dbl>     <dbl>    <dbl>
+    ## 1 (Intercept)  15.0      1.02           14.7 6.00e-44
+    ## 2 date_planted -0.000734 0.0000731     -10.0 1.45e-22
+
 <!----------------------------------------------------------------------------->
 
 # Task 4: Reading and writing data
@@ -429,6 +757,44 @@ function.
   file, and remake it simply by knitting this Rmd file.
 
 <!-------------------------- Start your work below ---------------------------->
+
+I would like to choose the table below, which was made in Milestone 1 to
+write it as a csv file in my `output` folder.
+
+``` r
+count_genus_vancouver_trees <- vancouver_trees %>%
+  select(genus_name) %>%
+  group_by(genus_name) %>%
+  count() %>%
+  arrange(desc(n))
+
+count_genus_vancouver_trees
+```
+
+    ## # A tibble: 97 × 2
+    ## # Groups:   genus_name [97]
+    ##    genus_name     n
+    ##    <chr>      <int>
+    ##  1 ACER       36062
+    ##  2 PRUNUS     30683
+    ##  3 FRAXINUS    7381
+    ##  4 TILIA       6773
+    ##  5 QUERCUS     6119
+    ##  6 CARPINUS    5806
+    ##  7 FAGUS       4808
+    ##  8 MALUS       4173
+    ##  9 MAGNOLIA    3899
+    ## 10 CRATAEGUS   3864
+    ## # … with 87 more rows
+
+Write the table as a csv file in my `output` folder.
+
+``` r
+dir.create(here::here("output"))
+
+write_csv(count_genus_vancouver_trees, here("output", "count_genus_vancouver_trees.csv"))
+```
+
 <!----------------------------------------------------------------------------->
 
 ## 3.2 (5 points)
@@ -440,6 +806,28 @@ Use the functions `saveRDS()` and `readRDS()`.
 - The same robustness and reproducibility criteria as in 3.1 apply here.
 
 <!-------------------------- Start your work below ---------------------------->
+
+Write the model as `model.rds` file in my `output` folder. Then load the
+saved file into new variable `read_Model`.
+
+``` r
+dir.create(here::here("output"))
+
+saveRDS(M, here("output", "model.rds"))
+
+read_Model <- readRDS(here("output", "model.rds"))
+
+read_Model
+```
+
+    ## 
+    ## Call:
+    ## lm(formula = diameter ~ date_planted, data = PRUNUS_vancouver_trees)
+    ## 
+    ## Coefficients:
+    ##  (Intercept)  date_planted  
+    ##   15.0133044    -0.0007342
+
 <!----------------------------------------------------------------------------->
 
 # Tidy Repository

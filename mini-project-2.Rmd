@@ -42,6 +42,7 @@ Begin by loading your data and the tidyverse package below:
 ```{r, message = FALSE}
 library(datateachr) # <- might contain the data you picked!
 library(tidyverse)
+library(here)
 ```
 
 # Task 1: Tidy your data (15 points)
@@ -90,13 +91,13 @@ Be sure to explain your reasoning for this task. Show us the "before" and "after
 
 <!--------------------------- Start your work below --------------------------->
 
-**Before modification:**
+**Dataset before modification:**
 
 ```{R}
 glimpse(vancouver_trees)
 ```
 
-**Tidy the data:**
+**Operations for tidying the data:**
 
 ```{R}
 # Combine civic_number and std_street to associated_address
@@ -114,15 +115,15 @@ vancouver_trees <- vancouver_trees %>%
   unite(col = coordinates, c(longitude, latitude), sep = ",")
 ```
 
-**After modification:**
+**Dataset after modification:**
 
 ```{R}
 glimpse(vancouver_trees)
 ```
 
-**Untidy it back:**
+**Operations for untidying it back:**
 
-```{R}
+```{R warning=FALSE}
 vancouver_trees <- vancouver_trees %>%
   separate(col = associated_address, c("civic_number", "std_street"), sep = " - ")
 
@@ -133,9 +134,17 @@ vancouver_trees <- vancouver_trees %>%
 
 vancouver_trees <- vancouver_trees %>%
   separate(col = coordinates, c("longitude", "latitude"), sep = ",")
+
+
+vancouver_trees$civic_number <- as.numeric(vancouver_trees$civic_number)
+vancouver_trees$on_street_block <- as.numeric(vancouver_trees$on_street_block)
+vancouver_trees$longitude <- as.numeric(vancouver_trees$longitude)
+vancouver_trees$latitude <- as.numeric(vancouver_trees$latitude)
+
+
 ```
 
-**After untidying back:**
+**Dataset after untidying back:**
 
 ```{R}
 glimpse(vancouver_trees)
@@ -152,8 +161,8 @@ Now, you should be more familiar with your data, and also have made progress in 
 
 <!-------------------------- Start your work below ---------------------------->
 
-1.  *FILL_THIS_IN*
-2.  *FILL_THIS_IN*
+1.  *Is root barrier affecting the diameter of trees? Is there any relationship between root_barrier, and tree genus/species?*
+2.  *What is the relationship between tree diameter and date_plant? Is it possible to predict tree diameter based on the variables like date_plant, genus, species?*
 
 <!----------------------------------------------------------------------------->
 
@@ -161,11 +170,94 @@ Explain your decision for choosing the above two research questions.
 
 <!--------------------------- Start your work below --------------------------->
 
+I found above two research questions are more interesting to explore and more related to our course content. The second research question Milestone 1 has been solved in. The fourth question should be solved by applying clustering algorithm, which does not relate to this course content.
+
 <!----------------------------------------------------------------------------->
 
 Now, try to choose a version of your data that you think will be appropriate to answer these 2 questions. Use between 4 and 8 functions that we've covered so far (i.e. by filtering, cleaning, tidy'ing, dropping irrelevant columns, etc.).
 
 <!--------------------------- Start your work below --------------------------->
+
+**Research question 1:**
+
+> Is root barrier affecting the diameter of trees? Is there any relationship between root_barrier, and tree genus/species?
+
+First, I try to know the number of root_barrier-installed trees for each genus, therefore, I only keep `genus_name`, `root_barrier`, `diameter` columns and drop the others. 
+
+```{R}
+genus_root_barrier_diameter_vancouver_trees <- vancouver_trees %>%
+  select(genus_name, root_barrier, diameter)
+  
+
+
+number_of_root_barrier <- genus_root_barrier_diameter_vancouver_trees %>%
+  filter(root_barrier == 'Y') %>%
+  group_by(genus_name) %>%
+  count() %>%
+  arrange(desc(n)) 
+
+number_of_root_barrier
+```
+
+Next, I try to compare the diameter of root_barrier-installed trees with the uninstalled ones for each genus.
+
+```{R}
+mean_diameter_root_barrier <- genus_root_barrier_diameter_vancouver_trees %>%
+  group_by(root_barrier, genus_name) %>%
+  summarise(Mean = mean(diameter)) %>%
+  pivot_wider(names_from = root_barrier, values_from = Mean)
+
+
+mean_diameter_root_barrier
+```
+
+Then, I try to find out the genus with a larger mean diameter for root_barrier-installed trees.
+
+```{R}
+mean_diameter_root_barrier %>%
+  filter(Y > N)
+```
+
+There are 6 genus with a longer mean diameter for root_barrier-installed trees. I want to know the potential reason.
+
+```{R}
+number_of_root_barrier %>%
+  filter(genus_name %in% c("CERCIS", "CHAMAECYPARIS", "METASEQUOIA", "PARROTIA", "PICEA", "THUJA"))
+```
+
+Genus "METASEQUOIA", "PICEA", "CHAMAECYPARIS", "THUJA" have a longer mean diameter because there are few observations for them. However, "PARROTIA" and "CERCIS" maybe special cases.
+
+
+**Research question 2:**
+
+> What is the relationship between tree diameter and date_plant? Is it possible to predict tree diameter based on the variables like date_plant, genus, species?
+
+Not only date_plant, the other colmuns like tree genus, species, or cultivar may also impact the tree diameter. I try to explore the tree diameter statistics under different tree genus, species, or cultivar. 
+
+First, I only keep `genus`, `species`, `cultivar`, `diameter` columns and drop the others.
+
+```{R}
+genus_species_cultivar_diameter_vancouver_trees <- vancouver_trees %>%
+  select(genus_name, species_name, cultivar_name, diameter)
+
+genus_species_cultivar_diameter_vancouver_trees
+```
+
+```{R}
+genus_species_cultivar_diameter_vancouver_trees %>%
+  group_by(genus_name) %>%
+  summarise(max(diameter), min(diameter), mean(diameter))
+  
+genus_species_cultivar_diameter_vancouver_trees %>%
+  group_by(species_name) %>%
+  summarise(max(diameter), min(diameter), mean(diameter))
+
+genus_species_cultivar_diameter_vancouver_trees %>%
+  group_by(cultivar_name) %>%
+  summarise(max(diameter), min(diameter), mean(diameter))
+```
+
+From the above statistics, we can see that the diameters under different genus, species, cultivar also differs a lot. Therefore, We can predict specific tree diameter based on the data in same genus, species, cultivar.
 
 <!----------------------------------------------------------------------------->
 
@@ -176,6 +268,18 @@ For this exercise, you'll be choosing two of the three tasks below -- both tasks
 But first, tasks 1 and 2 below ask you to modify a plot you made in a previous milestone. The plot you choose should involve plotting across at least three groups (whether by facetting, or using an aesthetic like colour). Place this plot below (you're allowed to modify the plot if you'd like). If you don't have such a plot, you'll need to make one. Place the code for your plot below.
 
 <!-------------------------- Start your work below ---------------------------->
+```{R}
+vancouver_trees$height_range_id <- as.character(vancouver_trees$height_range_id)
+
+vancouver_trees %>%
+  ggplot(aes(x = height_range_id, fill = root_barrier)) +
+    geom_bar()
+```
+
+
+
+
+
 
 <!----------------------------------------------------------------------------->
 
@@ -198,13 +302,33 @@ Now, choose two of the following tasks.
 
 <!-------------------------- Start your work below ---------------------------->
 
-**Task Number**: FILL_THIS_IN
+**Task Number**: Task 1
+
+I would like to reorder the `height_range_id` in numeric order to make it looks more clear.
+
+```{R}
+vancouver_trees %>%
+  mutate(height_range_id = fct_relevel(height_range_id, "0","1","2","3","4","5","6","7","8","9","10")) %>%
+  ggplot(aes(x = height_range_id, fill = root_barrier)) +
+    geom_bar()
+```
+
 
 <!----------------------------------------------------------------------------->
 
 <!-------------------------- Start your work below ---------------------------->
 
-**Task Number**: FILL_THIS_IN
+**Task Number**: Task 2
+
+I would like to group some height_range_id levels together into an "other" category because there are few samples in `height_range_id = 0, 9, 10`. These samples maybe special cases or errors, which will not be considered in my future research.
+
+```{R}
+vancouver_trees %>%
+  mutate(height_range_id = fct_relevel(height_range_id, "0","1","2","3","4","5","6","7","8","9","10")) %>%
+  mutate(height_range_id = fct_lump(height_range_id, n = 8)) %>%
+  ggplot(aes(x = height_range_id, fill = root_barrier)) +
+    geom_bar()
+```
 
 <!----------------------------------------------------------------------------->
 
@@ -216,9 +340,9 @@ Pick a research question, and pick a variable of interest (we'll call it "Y") th
 
 <!-------------------------- Start your work below ---------------------------->
 
-**Research Question**: FILL_THIS_IN
+**Research Question**: Is it possible to predict tree diameter based on the variables like date_plant, genus?
 
-**Variable of interest**: FILL_THIS_IN
+**Variable of interest**: diameter
 
 <!----------------------------------------------------------------------------->
 
@@ -234,6 +358,21 @@ Fit a model or run a hypothesis test that provides insight on this variable with
 
 <!-------------------------- Start your work below ---------------------------->
 
+I try to fit the model to predict the root-installed "PRUNUS" genus tree diameter based on their plant date.
+
+```{R}
+PRUNUS_vancouver_trees <- vancouver_trees %>%
+  select(diameter, date_planted, genus_name, root_barrier) %>%
+  filter(genus_name == "PRUNUS", root_barrier == "Y") %>%
+  drop_na()
+
+PRUNUS_vancouver_trees
+
+M <- lm(diameter ~ date_planted, PRUNUS_vancouver_trees)
+
+print(M)
+```
+
 <!----------------------------------------------------------------------------->
 
 ## 2.2 (5 points)
@@ -245,6 +384,13 @@ Produce something relevant from your fitted model: either predictions on Y, or a
 -   Obtain your results using the `broom` package if possible. If your model is not compatible with the broom function you're needing, then you can obtain your results by some other means, but first indicate which broom function is not compatible.
 
 <!-------------------------- Start your work below ---------------------------->
+
+`broom` package is used to obtain model results. 
+
+```{R}
+broom::tidy(M)
+```
+
 
 <!----------------------------------------------------------------------------->
 
@@ -261,6 +407,27 @@ Take a summary table that you made from Milestone 1 (Task 4.2), and write it as 
 
 <!-------------------------- Start your work below ---------------------------->
 
+I would like to choose the table below, which was made in Milestone 1 to write it as a csv file in my `output` folder.
+
+```{R}
+count_genus_vancouver_trees <- vancouver_trees %>%
+  select(genus_name) %>%
+  group_by(genus_name) %>%
+  count() %>%
+  arrange(desc(n))
+
+count_genus_vancouver_trees
+```
+
+Write the table as a csv file in my `output` folder.
+
+```{R warning=FALSE}
+
+dir.create(here::here("output"))
+
+write_csv(count_genus_vancouver_trees, here("output", "count_genus_vancouver_trees.csv"))
+```
+
 <!----------------------------------------------------------------------------->
 
 ## 3.2 (5 points)
@@ -270,6 +437,19 @@ Write your model object from Task 3 to an R binary file (an RDS), and load it ag
 -   The same robustness and reproducibility criteria as in 3.1 apply here.
 
 <!-------------------------- Start your work below ---------------------------->
+
+Write the model as `model.rds` file in my `output` folder. Then load the saved file into new variable `read_Model`.
+
+```{R warning=FALSE}
+dir.create(here::here("output"))
+
+saveRDS(M, here("output", "model.rds"))
+
+read_Model <- readRDS(here("output", "model.rds"))
+
+read_Model
+```
+
 
 <!----------------------------------------------------------------------------->
 
