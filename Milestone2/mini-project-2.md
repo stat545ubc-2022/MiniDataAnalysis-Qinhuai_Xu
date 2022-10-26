@@ -689,8 +689,6 @@ specifics in STAT 545.
 I try to fit the model to predict the root-installed “PRUNUS” genus tree
 diameter based on their plant date.
 
-First, filter `genus_name == "PRUNUS"`, `root_barrier == "Y"`.
-
 ``` r
 PRUNUS_vancouver_trees <- vancouver_trees %>%
   select(diameter, date_planted, genus_name, root_barrier) %>%
@@ -714,8 +712,6 @@ PRUNUS_vancouver_trees
     ##  9     3.25 2007-01-16   PRUNUS     Y           
     ## 10     8    2006-01-24   PRUNUS     Y           
     ## # … with 872 more rows
-
-Next, fit the model.
 
 ``` r
 M <- lm(diameter ~ date_planted, PRUNUS_vancouver_trees)

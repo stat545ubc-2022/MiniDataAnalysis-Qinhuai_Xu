@@ -351,9 +351,7 @@ Fit a model or run a hypothesis test that provides insight on this variable with
 
 <!-------------------------- Start your work below ---------------------------->
 
-I try to fit the model to predict the root-installed "PRUNUS" genus tree diameter based on their plant date. 
-
-First, filter `genus_name == "PRUNUS"`, `root_barrier == "Y"`.
+I try to fit the model to predict the root-installed "PRUNUS" genus tree diameter based on their plant date.
 
 ```{R}
 PRUNUS_vancouver_trees <- vancouver_trees %>%
@@ -362,11 +360,7 @@ PRUNUS_vancouver_trees <- vancouver_trees %>%
   drop_na()
 
 PRUNUS_vancouver_trees
-```
 
-Next, fit the model.
-
-```{R}
 M <- lm(diameter ~ date_planted, PRUNUS_vancouver_trees)
 
 M
