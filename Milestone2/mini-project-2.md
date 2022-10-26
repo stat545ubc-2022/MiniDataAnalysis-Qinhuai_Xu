@@ -614,9 +614,9 @@ Now, choose two of the following tasks.
 
 **Task Number**: Task 1
 
-From the above plot, we can see that the columns was ordered in
-character order. I would like to reorder the `height_range_id` in
-numeric order to make it looks more clear.
+From the above plot, we can notice that `height_range_id` was ordered in
+character order. I would like to reorder it in numeric order to make it
+looks more clear.
 
 ``` r
 vancouver_trees %>%
@@ -689,6 +689,8 @@ specifics in STAT 545.
 I try to fit the model to predict the root-installed “PRUNUS” genus tree
 diameter based on their plant date.
 
+First, filter `genus_name == "PRUNUS"`, `root_barrier == "Y"`.
+
 ``` r
 PRUNUS_vancouver_trees <- vancouver_trees %>%
   select(diameter, date_planted, genus_name, root_barrier) %>%
@@ -712,6 +714,8 @@ PRUNUS_vancouver_trees
     ##  9     3.25 2007-01-16   PRUNUS     Y           
     ## 10     8    2006-01-24   PRUNUS     Y           
     ## # … with 872 more rows
+
+Next, fit the model.
 
 ``` r
 M <- lm(diameter ~ date_planted, PRUNUS_vancouver_trees)
@@ -791,8 +795,8 @@ function.
 
 <!-------------------------- Start your work below ---------------------------->
 
-I would like to choose the table below, which was made in Milestone 1,
-to finish this task.
+I would like to choose the table below, which was made in Milestone 1 to
+finish this task.
 
 ``` r
 count_genus_vancouver_trees <- vancouver_trees %>%
