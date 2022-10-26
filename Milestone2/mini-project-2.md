@@ -311,16 +311,35 @@ dropping irrelevant columns, etc.).
 > Is root barrier affecting the diameter of trees? Is there any
 > relationship between root_barrier, and tree genus/species?
 
-First, I try to know the number of root_barrier-installed trees for each
-genus, therefore, I only keep `genus_name`, `root_barrier`, `diameter`
-columns and drop the others.
+First, I only keep `genus_name`, `root_barrier`, `diameter` columns and
+drop the others.
 
 ``` r
 genus_root_barrier_diameter_vancouver_trees <- vancouver_trees %>%
   select(genus_name, root_barrier, diameter)
-  
 
+genus_root_barrier_diameter_vancouver_trees
+```
 
+    ## # A tibble: 146,611 × 3
+    ##    genus_name root_barrier diameter
+    ##    <chr>      <chr>           <dbl>
+    ##  1 ULMUS      N                10  
+    ##  2 ZELKOVA    N                10  
+    ##  3 STYRAX     N                 4  
+    ##  4 FRAXINUS   N                18  
+    ##  5 ACER       N                 9  
+    ##  6 PYRUS      N                 5  
+    ##  7 ACER       N                15  
+    ##  8 ACER       N                14  
+    ##  9 ACER       N                16  
+    ## 10 FRAXINUS   N                 7.5
+    ## # … with 146,601 more rows
+
+Then filter all `root_barrier == 'Y'` samples to calculate the number of
+root_barrier-installed trees for each genus.
+
+``` r
 number_of_root_barrier <- genus_root_barrier_diameter_vancouver_trees %>%
   filter(root_barrier == 'Y') %>%
   group_by(genus_name) %>%
@@ -346,8 +365,9 @@ number_of_root_barrier
     ## 10 SYRINGA      253
     ## # … with 35 more rows
 
-Next, I try to compare the diameter of root_barrier-installed trees with
-the uninstalled ones for each genus.
+Next, `pivot_wider` is used to tidy data and compare the mean diameter
+of root_barrier-installed trees with the uninstalled ones for each
+genus.
 
 ``` r
 mean_diameter_root_barrier <- genus_root_barrier_diameter_vancouver_trees %>%
@@ -396,8 +416,9 @@ mean_diameter_root_barrier %>%
     ## 5 PICEA         11.0  16.3 
     ## 6 THUJA         17.5  38
 
-There are 6 genus with a longer mean diameter for root_barrier-installed
-trees. I want to know the potential reason.
+We can see that there are 6 genus with a longer mean diameter for
+root_barrier-installed trees. I try to find the potential reason by
+looking into `number_of_root_barrier` data.
 
 ``` r
 number_of_root_barrier %>%
@@ -416,8 +437,8 @@ number_of_root_barrier %>%
     ## 6 THUJA             1
 
 Genus “METASEQUOIA”, “PICEA”, “CHAMAECYPARIS”, “THUJA” have a longer
-mean diameter because there are few observations for them. However,
-“PARROTIA” and “CERCIS” maybe special cases.
+mean diameter because there are few observations for them, while
+“PARROTIA” and “CERCIS” should be special cases.
 
 **Research question 2:**
 
@@ -546,7 +567,7 @@ vancouver_trees %>%
     geom_bar()
 ```
 
-![](mini-project-2_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+![](mini-project-2_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
 
 <!----------------------------------------------------------------------------->
 
@@ -593,8 +614,9 @@ Now, choose two of the following tasks.
 
 **Task Number**: Task 1
 
-I would like to reorder the `height_range_id` in numeric order to make
-it looks more clear.
+From the above plot, we can see that the columns was ordered in
+character order. I would like to reorder the `height_range_id` in
+numeric order to make it looks more clear.
 
 ``` r
 vancouver_trees %>%
@@ -603,14 +625,14 @@ vancouver_trees %>%
     geom_bar()
 ```
 
-![](mini-project-2_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
+![](mini-project-2_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
 
 <!----------------------------------------------------------------------------->
 <!-------------------------- Start your work below ---------------------------->
 
 **Task Number**: Task 2
 
-I would like to group some height_range_id levels together into an
+I would like to group some `height_range_id` levels together into an
 “other” category because there are few samples in
 `height_range_id = 0, 9, 10`. These samples maybe special cases or
 errors, which will not be considered in my future research.
@@ -623,7 +645,7 @@ vancouver_trees %>%
     geom_bar()
 ```
 
-![](mini-project-2_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
+![](mini-project-2_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
 
 <!----------------------------------------------------------------------------->
 
@@ -694,7 +716,7 @@ PRUNUS_vancouver_trees
 ``` r
 M <- lm(diameter ~ date_planted, PRUNUS_vancouver_trees)
 
-print(M)
+M
 ```
 
     ## 
@@ -735,6 +757,17 @@ broom::tidy(M)
     ## 1 (Intercept)  15.0      1.02           14.7 6.00e-44
     ## 2 date_planted -0.000734 0.0000731     -10.0 1.45e-22
 
+``` r
+broom::glance(M)
+```
+
+    ## # A tibble: 1 × 12
+    ##   r.squared adj.r.squa…¹ sigma stati…²  p.value    df logLik   AIC   BIC devia…³
+    ##       <dbl>        <dbl> <dbl>   <dbl>    <dbl> <dbl>  <dbl> <dbl> <dbl>   <dbl>
+    ## 1     0.103        0.102  2.66    101. 1.45e-22     1 -2115. 4235. 4249.   6242.
+    ## # … with 2 more variables: df.residual <int>, nobs <int>, and abbreviated
+    ## #   variable names ¹​adj.r.squared, ²​statistic, ³​deviance
+
 <!----------------------------------------------------------------------------->
 
 # Task 4: Reading and writing data
@@ -758,8 +791,8 @@ function.
 
 <!-------------------------- Start your work below ---------------------------->
 
-I would like to choose the table below, which was made in Milestone 1 to
-write it as a csv file in my `output` folder.
+I would like to choose the table below, which was made in Milestone 1,
+to finish this task.
 
 ``` r
 count_genus_vancouver_trees <- vancouver_trees %>%
@@ -807,14 +840,17 @@ Use the functions `saveRDS()` and `readRDS()`.
 
 <!-------------------------- Start your work below ---------------------------->
 
-Write the model as `model.rds` file in my `output` folder. Then load the
-saved file into new variable `read_Model`.
+Write the model as `model.rds` file in my `output` folder.
 
 ``` r
 dir.create(here::here("output"))
 
 saveRDS(M, here("output", "model.rds"))
+```
 
+Load the saved file into new variable `read_Model`.
+
+``` r
 read_Model <- readRDS(here("output", "model.rds"))
 
 read_Model

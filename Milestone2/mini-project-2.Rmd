@@ -76,9 +76,6 @@ I think my data is untidy because there are some columns that should be united.
 * `longitude` and `latitude`:
 
 
-
-
-
 <!----------------------------------------------------------------------------->
 
 ### 2.2 (5 points)
@@ -141,7 +138,6 @@ vancouver_trees$on_street_block <- as.numeric(vancouver_trees$on_street_block)
 vancouver_trees$longitude <- as.numeric(vancouver_trees$longitude)
 vancouver_trees$latitude <- as.numeric(vancouver_trees$latitude)
 
-
 ```
 
 **Dataset after untidying back:**
@@ -182,14 +178,18 @@ Now, try to choose a version of your data that you think will be appropriate to 
 
 > Is root barrier affecting the diameter of trees? Is there any relationship between root_barrier, and tree genus/species?
 
-First, I try to know the number of root_barrier-installed trees for each genus, therefore, I only keep `genus_name`, `root_barrier`, `diameter` columns and drop the others. 
+First, I only keep `genus_name`, `root_barrier`, `diameter` columns and drop the others. 
 
 ```{R}
 genus_root_barrier_diameter_vancouver_trees <- vancouver_trees %>%
   select(genus_name, root_barrier, diameter)
-  
 
+genus_root_barrier_diameter_vancouver_trees
+```  
 
+Then filter all `root_barrier == 'Y'` samples to calculate the number of root_barrier-installed trees for each genus.
+
+```{R}
 number_of_root_barrier <- genus_root_barrier_diameter_vancouver_trees %>%
   filter(root_barrier == 'Y') %>%
   group_by(genus_name) %>%
@@ -199,14 +199,13 @@ number_of_root_barrier <- genus_root_barrier_diameter_vancouver_trees %>%
 number_of_root_barrier
 ```
 
-Next, I try to compare the diameter of root_barrier-installed trees with the uninstalled ones for each genus.
+Next, `pivot_wider` is used to tidy data and compare the mean diameter of root_barrier-installed trees with the uninstalled ones for each genus.
 
 ```{R}
 mean_diameter_root_barrier <- genus_root_barrier_diameter_vancouver_trees %>%
   group_by(root_barrier, genus_name) %>%
   summarise(Mean = mean(diameter)) %>%
   pivot_wider(names_from = root_barrier, values_from = Mean)
-
 
 mean_diameter_root_barrier
 ```
@@ -218,14 +217,14 @@ mean_diameter_root_barrier %>%
   filter(Y > N)
 ```
 
-There are 6 genus with a longer mean diameter for root_barrier-installed trees. I want to know the potential reason.
+We can see that there are 6 genus with a longer mean diameter for root_barrier-installed trees. I try to find the potential reason by looking into `number_of_root_barrier` data.
 
 ```{R}
 number_of_root_barrier %>%
   filter(genus_name %in% c("CERCIS", "CHAMAECYPARIS", "METASEQUOIA", "PARROTIA", "PICEA", "THUJA"))
 ```
 
-Genus "METASEQUOIA", "PICEA", "CHAMAECYPARIS", "THUJA" have a longer mean diameter because there are few observations for them. However, "PARROTIA" and "CERCIS" maybe special cases.
+Genus "METASEQUOIA", "PICEA", "CHAMAECYPARIS", "THUJA" have a longer mean diameter because there are few observations for them, while "PARROTIA" and "CERCIS" should be special cases.
 
 
 **Research question 2:**
@@ -276,11 +275,6 @@ vancouver_trees %>%
     geom_bar()
 ```
 
-
-
-
-
-
 <!----------------------------------------------------------------------------->
 
 Now, choose two of the following tasks.
@@ -304,7 +298,7 @@ Now, choose two of the following tasks.
 
 **Task Number**: Task 1
 
-I would like to reorder the `height_range_id` in numeric order to make it looks more clear.
+From the above plot, we can see that the columns was ordered in character order. I would like to reorder the `height_range_id` in numeric order to make it looks more clear.
 
 ```{R}
 vancouver_trees %>%
@@ -313,14 +307,13 @@ vancouver_trees %>%
     geom_bar()
 ```
 
-
 <!----------------------------------------------------------------------------->
 
 <!-------------------------- Start your work below ---------------------------->
 
 **Task Number**: Task 2
 
-I would like to group some height_range_id levels together into an "other" category because there are few samples in `height_range_id = 0, 9, 10`. These samples maybe special cases or errors, which will not be considered in my future research.
+I would like to group some `height_range_id` levels together into an "other" category because there are few samples in `height_range_id = 0, 9, 10`. These samples maybe special cases or errors, which will not be considered in my future research.
 
 ```{R}
 vancouver_trees %>%
@@ -370,7 +363,7 @@ PRUNUS_vancouver_trees
 
 M <- lm(diameter ~ date_planted, PRUNUS_vancouver_trees)
 
-print(M)
+M
 ```
 
 <!----------------------------------------------------------------------------->
@@ -385,12 +378,15 @@ Produce something relevant from your fitted model: either predictions on Y, or a
 
 <!-------------------------- Start your work below ---------------------------->
 
-`broom` package is used to obtain model results. 
+`broom` package is used to obtain model results.
 
 ```{R}
 broom::tidy(M)
 ```
 
+```{R}
+broom::glance(M)
+```
 
 <!----------------------------------------------------------------------------->
 
@@ -407,7 +403,7 @@ Take a summary table that you made from Milestone 1 (Task 4.2), and write it as 
 
 <!-------------------------- Start your work below ---------------------------->
 
-I would like to choose the table below, which was made in Milestone 1 to write it as a csv file in my `output` folder.
+I would like to choose the table below, which was made in Milestone 1, to finish this task.
 
 ```{R}
 count_genus_vancouver_trees <- vancouver_trees %>%
@@ -438,17 +434,22 @@ Write your model object from Task 3 to an R binary file (an RDS), and load it ag
 
 <!-------------------------- Start your work below ---------------------------->
 
-Write the model as `model.rds` file in my `output` folder. Then load the saved file into new variable `read_Model`.
+Write the model as `model.rds` file in my `output` folder.
 
 ```{R warning=FALSE}
 dir.create(here::here("output"))
 
 saveRDS(M, here("output", "model.rds"))
+```
 
+Load the saved file into new variable `read_Model`.
+
+```{R}
 read_Model <- readRDS(here("output", "model.rds"))
 
 read_Model
 ```
+
 
 
 <!----------------------------------------------------------------------------->
